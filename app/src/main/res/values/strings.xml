@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ConsultaCEPeRastreio</string>
+    <string name="generic_error">"Houve algum erro: "</string>
 </resources>
