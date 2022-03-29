@@ -11,7 +11,7 @@ public class CEP {
     private String gia;
     private String ddd;
     private String siafi;
-    private boolean error;
+    private boolean erro;
 
     public String getCep() {
         return cep;
@@ -109,11 +109,11 @@ public class CEP {
                 '}';
     }
 
-    public boolean isError() {
-        return error;
+    public boolean isErro() {
+        return erro;
     }
 
-    public void setError(boolean error) {
-        this.error = error;
+    public void setErro(boolean erro) {
+        this.erro = erro;
     }
 }

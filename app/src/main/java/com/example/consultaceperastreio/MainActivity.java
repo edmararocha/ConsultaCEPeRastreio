@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.consultaceperastreio.activities.ConsultaCEP;
+import com.example.consultaceperastreio.activities.ConsultaRastreio;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ConsultaCEP.class);
+                startActivity(intent);
+            }
+        });
+
+        consultaRastreio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ConsultaRastreio.class);
                 startActivity(intent);
             }
         });

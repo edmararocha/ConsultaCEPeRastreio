@@ -3,17 +3,22 @@ package com.example.consultaceperastreio.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.consultaceperastreio.MainActivity;
 import com.example.consultaceperastreio.R;
 import com.example.consultaceperastreio.model.CEP;
 import com.example.consultaceperastreio.model.SimpleCallback;
+import com.example.consultaceperastreio.utils.MaskEditUtil;
 import com.example.consultaceperastreio.utils.ServiceCEP;
 
 public class ConsultaCEP extends AppCompatActivity {
@@ -32,6 +37,7 @@ public class ConsultaCEP extends AppCompatActivity {
     private TextView textSIAFI;
     private ProgressBar progressBar;
     private ConstraintLayout info;
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,9 @@ public class ConsultaCEP extends AppCompatActivity {
         textSIAFI = findViewById(R.id.text_siafi_content);
         progressBar = findViewById(R.id.progress_bar);
         info = findViewById(R.id.info_layout);
+        backButton = findViewById(R.id.back_image_button);
+
+        etCEP.addTextChangedListener(MaskEditUtil.mask(etCEP, MaskEditUtil.FORMAT_CEP));
 
         progressBar.setVisibility(View.INVISIBLE);
         info.setVisibility(View.INVISIBLE);
@@ -59,32 +68,36 @@ public class ConsultaCEP extends AppCompatActivity {
         btnConsultarCEP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!etCEP.getText().toString().isEmpty() && etCEP.length() == 8) {
+
+                String cep = MaskEditUtil.unmask(etCEP.getText().toString());
+                Log.i("CEP:", cep);
+
+                if (!cep.isEmpty() && cep.length() == 8) {
 
                     progressBar.setVisibility(View.VISIBLE);
                     info.setVisibility(View.INVISIBLE);
                     ServiceCEP service = new ServiceCEP(ConsultaCEP.this);
 
-                    service.getCEP(etCEP.getText().toString(), new SimpleCallback<CEP>() {
+                    service.getCEP(cep, new SimpleCallback<CEP>() {
                         @Override
                         public void onResponse(CEP response) {
-                            CEP cep = response;
 
-                            if (cep.isError() == true) {
-                                toast("CEP inválido!");
-                            } else {
-                                textCEP.setText(cep.getCep());
-                                textLogradouro.setText(cep.getLogradouro());
-                                textComplemento.setText(cep.getComplemento());
-                                textBairro.setText(cep.getBairro());
-                                textLocalidade.setText(cep.getLocalidade());
-                                textUF.setText(cep.getUf());
-                                textIBGE.setText(cep.getIbge());
-                                textGIA.setText(cep.getGia());
-                                textDDD.setText(cep.getDdd());
-                                textSIAFI.setText(cep.getSiafi());
+                            if (!response.isErro()) {
+                                textCEP.setText(response.getCep());
+                                textLogradouro.setText(response.getLogradouro());
+                                textComplemento.setText(response.getComplemento());
+                                textBairro.setText(response.getBairro());
+                                textLocalidade.setText(response.getLocalidade());
+                                textUF.setText(response.getUf());
+                                textIBGE.setText(response.getIbge());
+                                textGIA.setText(response.getGia());
+                                textDDD.setText(response.getDdd());
+                                textSIAFI.setText(response.getSiafi());
                                 progressBar.setVisibility(View.INVISIBLE);
                                 info.setVisibility(View.VISIBLE);
+                            } else {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                toast("CEP inválido!");
                             }
                         }
 
@@ -96,8 +109,17 @@ public class ConsultaCEP extends AppCompatActivity {
                     });
 
                 } else {
-                    toast("Inválido!");
+                    toast("Digite um cep válido!");
                 }
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
