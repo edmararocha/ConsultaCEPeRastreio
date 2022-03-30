@@ -1,13 +1,13 @@
-package com.example.consultaceperastreio.utils;
+package com.example.consultaceperastreio.service;
 
 import android.content.Context;
 
 import com.example.consultaceperastreio.model.CEP;
 import com.example.consultaceperastreio.model.SimpleCallback;
+import com.example.consultaceperastreio.utils.CEPDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceCEP {
 
     private Context context;
-    private RetrofitService service;
+    private RetrofitServiceCEP service;
 
     public ServiceCEP (Context context) {
         this.context = context;
@@ -42,14 +42,14 @@ public class ServiceCEP {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitService.BASE_URL)
+                .baseUrl(RetrofitServiceCEP.BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        service = retrofit.create(RetrofitService.class);
+        service = retrofit.create(RetrofitServiceCEP.class);
 
-        final RetrofitService service = retrofit.create(RetrofitService.class);
+        final RetrofitServiceCEP service = retrofit.create(RetrofitServiceCEP.class);
     }
 
     public void getCEP(String CEP, final SimpleCallback<CEP> callback){

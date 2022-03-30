@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/back_image_button"
+        android:id="@+id/back_image_button_rastreio"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="16dp"
@@ -156,7 +156,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_cidade"
+            android:id="@+id/linear_local"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -169,7 +169,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linear_descricao">
 
             <TextView
-                android:id="@+id/text_cidade"
+                android:id="@+id/text_local"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Local:"
@@ -180,7 +180,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/text_cidade_content"
+                android:id="@+id/text_local_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fortaleza - CE"

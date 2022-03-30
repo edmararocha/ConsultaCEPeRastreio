@@ -19,7 +19,7 @@ import com.example.consultaceperastreio.R;
 import com.example.consultaceperastreio.model.CEP;
 import com.example.consultaceperastreio.model.SimpleCallback;
 import com.example.consultaceperastreio.utils.MaskEditUtil;
-import com.example.consultaceperastreio.utils.ServiceCEP;
+import com.example.consultaceperastreio.service.ServiceCEP;
 
 public class ConsultaCEP extends AppCompatActivity {
 
@@ -43,6 +43,10 @@ public class ConsultaCEP extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consulta_cep);
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 
         etCEP = findViewById(R.id.edittext_cep);
         btnConsultarCEP = findViewById(R.id.btn_consultCEP);

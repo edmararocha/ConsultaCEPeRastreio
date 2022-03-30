@@ -1,4 +1,4 @@
-package com.example.consultaceperastreio.utils;
+package com.example.consultaceperastreio.service;
 
 import com.example.consultaceperastreio.model.CEP;
 
@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface RetrofitService {
+public interface RetrofitServiceCEP {
 
     String BASE_URL = "https://viacep.com.br/ws/";
 
