@@ -3,10 +3,11 @@ package com.example.consultaceperastreio.service;
 import android.content.Context;
 
 import com.example.consultaceperastreio.model.Rastreio;
-import com.example.consultaceperastreio.model.SimpleCallback;
-import com.example.consultaceperastreio.utils.CEPDeserializer;
+import com.example.consultaceperastreio.model.SimpleCallbackRastreio;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +31,7 @@ public class ServiceRastreio {
     }
 
     private void initialize() {
-        Gson gson = new GsonBuilder().registerTypeAdapter(Rastreio.class, new CEPDeserializer()).create();
+        Gson gson = new GsonBuilder().create();
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -48,29 +49,27 @@ public class ServiceRastreio {
                 .build();
 
         service = retrofit.create(RetrofitServiceRastreio.class);
-
-        final RetrofitServiceRastreio service = retrofit.create(RetrofitServiceRastreio.class);
     }
 
-    public void getCodigo(String codigo, final SimpleCallback<Rastreio> callback){
+    public void getCodigo(String codigo, final SimpleCallbackRastreio<Rastreio> callbackRastreio) {
         service.consultarObjeto(codigo).enqueue(new Callback<Rastreio>() {
             @Override
             public void onResponse(Call<Rastreio> call, Response<Rastreio> response) {
-                if (response.isSuccessful () && response.body () != null) {
-                    callback.onResponse (response.body());
-                } else {
-                    if (response.body () != null) {
-                        callback.onError("erro");
-                    } else {
-                        callback.onError("erro");
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        callbackRastreio.onResponse(response.body());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    callbackRastreio.onError("erro");
                 }
             }
 
             @Override
             public void onFailure(Call<Rastreio> call, Throwable t) {
-                t.printStackTrace ();
-                callback.onError (t.getMessage());
+                t.printStackTrace();
+                callbackRastreio.onError(t.getMessage());
             }
         });
     }

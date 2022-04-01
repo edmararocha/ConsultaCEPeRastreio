@@ -19,9 +19,18 @@ import com.example.consultaceperastreio.R;
 import com.example.consultaceperastreio.model.CEP;
 import com.example.consultaceperastreio.model.Rastreio;
 import com.example.consultaceperastreio.model.SimpleCallback;
+import com.example.consultaceperastreio.model.SimpleCallbackRastreio;
 import com.example.consultaceperastreio.service.ServiceCEP;
 import com.example.consultaceperastreio.service.ServiceRastreio;
 import com.example.consultaceperastreio.utils.MaskEditUtil;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 
 public class ConsultaRastreio extends AppCompatActivity {
 
@@ -67,6 +76,39 @@ public class ConsultaRastreio extends AppCompatActivity {
                     info.setVisibility(View.INVISIBLE);
 
                     ServiceRastreio service = new ServiceRastreio(ConsultaRastreio.this);
+
+                    service.getCodigo(etCodigo.getText().toString(),new SimpleCallbackRastreio<Rastreio>() {
+
+                        @Override
+                        public void onResponse(Rastreio response) throws JSONException {
+                            Gson gson = new Gson();
+
+                            String jsonString = gson.toJson(response.getObjetos().get(0));
+                            JSONObject jsonObject = new JSONObject(jsonString);
+
+                            if(!jsonObject.getString("modalidade").equals("V")) {
+                                textCodigo.setText(jsonObject.getString("codObjeto"));
+                                textDescricao.setText(jsonObject.getJSONArray("eventos").getJSONObject(0).getString("descricao"));
+                                textLocal.setText(jsonObject.getJSONArray("eventos").getJSONObject(0).getJSONObject("unidade").getJSONObject("endereco").getString("cidade") + " - " +
+                                        jsonObject.getJSONArray("eventos").getJSONObject(0).getJSONObject("unidade").getJSONObject("endereco").getString("uf"));
+
+                                info.setVisibility(View.VISIBLE);
+
+                            } else {
+                                toast(jsonObject.getString("mensagem"));
+                            }
+
+
+                            Log.i("OBJETO", jsonString);
+
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            toast("Código inválido!");
+                        }
+                    });
                 } else {
                     toast("Digite um código válido!");
                 }
